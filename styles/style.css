@@ -1,0 +1,29 @@
+
+code {
+    color: #d63384;
+}
+
+.poly_listitem_color {
+    border-radius: 4px;
+    padding-right:21px;
+    margin-right: 10px;
+    margin-left: 10px;
+    box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.15);
+}
+.poly_listitem_content {
+    text-transform: lowercase;
+    font-family: monospace;
+}
+.p_strong_title {
+    margin-right: 7px;
+}
+.hide_elem {
+    visibility: hidden;
+}
+.bg_video_ {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%; 
+    min-height: 100%;
+}
