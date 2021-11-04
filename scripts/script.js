@@ -14,6 +14,7 @@ document.getElementById('file_export').addEventListener('click', function(event)
     document.getElementById('result_text').value = carObj.getCode();
 });
 
+document.getElementById('input-file').addEventListener('change', getFile);
 
 ////////////////
 // VARIABLES //
@@ -23,7 +24,6 @@ let carObj;
 ////////////
 // UTILS //
 //////////
-document.getElementById('input-file').addEventListener('change', getFile);
 
 function getFile(event) {
     const input = event.target;
@@ -196,7 +196,7 @@ class Car {
                 if(_ln.toLowerCase().startsWith('glass')) {
                     isGlass_ = true;
                 }
-                if(_ln.toLowerCase().startsWith('light')) {  // isssssstenem...
+                if(_ln.toLowerCase().startsWith('light')) {
                     isLight_ = true;
                 }
                 if(_ln.toLowerCase().startsWith('lightf')) {
@@ -205,11 +205,6 @@ class Car {
                 if(_ln.toLowerCase().startsWith('lightb')) {
                     isLightB_ = true;
                 }
-                // a gyász megveri hogy nem akarja ÉSZLELNI AZT A ROHADT SZÖVEGETttttttttttttttttttttttttttzrtzrberfgdkjgfldkjfgdkfjgdkfjgldkfjgldiriuwzewbetsjdskdklsjdnlfjsndfosiuehntoieot
-                // EDIT: else ifben jó... MI?!?!?!?!?!?!?!?!?!?!?!?!?!?!!! az if után is le kéne fusson ternaryval
-                // EDIT2: A GLASS UGYANÚGY UGYANOTT VAN ÉS NEM JÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓ
-                // MIÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉRT
-                // EDIT3: A .INCLUDES SZERINT A 'glass()' NEM TARTALMAZZA AZT HOGY 'glass', de csak itt, máshol MINDENHOL TRUE (ezzel már 3 óra ráment erre a fixre)
             }
             if(vertices.length>0) {
                 this.polys.push(new Poly(color,vertices,hasgr,gr,hasfs,fs,noOutline_,comment_,isGlass_,isLight_,isLightF_,isLightB_));
