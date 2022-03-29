@@ -1,0 +1,72 @@
+html {
+    height: 100%;
+}
+body {
+    /*background-image: none;*/
+    animation: fadein .5s;
+}
+
+.polyitem-color {
+    border-radius: 4px;
+    padding-right: 21px;
+    margin-right: 1rem;
+    margin-left: 10px;
+    box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.15);
+}
+.polyitem-vertcount {
+    margin-right: 1rem;
+}
+.polyitem-checkbox {
+    position: absolute;
+    width: 3%;
+    height: 52px;
+    border-radius: 1px;
+    opacity: 50%;
+}
+.polyitem-checkbox.active {
+    opacity: 100%;
+}
+.polyitem-checkbox.active .polyitem-checkbox-icon {
+    display: block !important;
+}
+.polyitem-checkbox-icon {
+    max-height: 100%;
+    max-width: 100%;
+    display: none !important;
+}
+.polyitem-btn {
+    margin-left: 3%;
+    width: 97%;
+}
+
+#theme-list a {
+    font-size: 0.85rem;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+#theme-list-current {
+    cursor: default;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.bg-dark button {
+    /*color: var(--bs-light) !important;*/
+    color: rgba(255,255,255,.55);
+}
+.bg-light button {
+    /*color: var(--bs-dark) !important;*/
+    color: rgba(0,0,0,.55);
+}
+
+#darkmode-toggle-container {
+    text-align: right;
+}
+#darkmode-toggle-container input {
+    float: right;
+    position: relative !important;
+    margin: 5px !important;
+}

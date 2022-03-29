@@ -7,7 +7,7 @@ document.getElementById('btn_log').addEventListener('click', function(event){
 });
 
 document.getElementById('afong').addEventListener('click', function(event){
-    document.getElementById('afong_debug').classList.toggle('hide_elem');
+    //document.getElementById('afong_debug').classList.toggle('hide_elem');
 });
 
 document.getElementById('file_export').addEventListener('click', function(event){
@@ -68,15 +68,9 @@ function addListItem() {
         }
     }
 }
+
 function clearList() {
     document.getElementById('poly-accord').innerHTML = '';
-}
-
-function animate() {
-    requestAnimationFrame(animate);
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
-    renderer.render(scene, camera);
 }
 
 function getPolyAccordionItem(_index,_poly) {
@@ -96,7 +90,7 @@ function getPolyAccordionItem(_index,_poly) {
     p_title_btn.setAttribute('aria-expanded','false');
     p_title_btn.setAttribute('aria-controls',`collapse-${_index}`);
     // accordion 'title'
-    p_title_btn.innerHTML = `<span class="poly_listitem_color" style="background: rgb(${_poly.color[0]},${_poly.color[1]},${_poly.color[2]});">&nbsp;</span><strong class="p_strong_title">${_index.toString().padStart(3,'0')}</strong> ${_poly.comment}`;
+    p_title_btn.innerHTML = `<span class="polyitem-color" style="background: rgb(${_poly.color[0]},${_poly.color[1]},${_poly.color[2]});">&nbsp;</span><strong>${_index.toString().padStart(3,'0')}</strong> ${_poly.comment}`;
     p_title.appendChild(p_title_btn);
 
     let p_body = document.createElement('div');
@@ -123,6 +117,7 @@ function draw2d() {
     let ctx = document.getElementById('c').getContext('2d');
     ctx.clearRect(0, 0, document.getElementById('c').width, document.getElementById('c').height);
     let r_p = carObj.getRebasedPolys();
+    //let r_p = carObj.polys;
     r_p.forEach(_p => {
         ctx.fillStyle = `rgb(${_p.color[0]},${_p.color[1]},${_p.color[2]})`;
         ctx.beginPath();
@@ -136,6 +131,51 @@ function draw2d() {
             ctx.stroke();
         }
     });
+    carObj.logVerts();
+}
+
+
+function saveFile(filename, content) {
+    const blob = new Blob([content], {type: 'text'});
+    if(window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveBlob(blob, filename);
+    }
+    else{
+        const elem = window.document.createElement('a');
+        elem.style.display = "none";
+        elem.href = window.URL.createObjectURL(blob, { oneTimeOnly: true });
+        elem.download = filename;
+        document.body.appendChild(elem);
+        elem.click();        
+        document.body.removeChild(elem);
+    }
+}
+
+function getPoints() {
+    //carObj = new Car('new');
+    let str = '';
+    carObj.polys.forEach(poly => {
+        poly.vertices.forEach(vert => str += `new THREE.Vector3(${vert[0]}, ${vert[1]}, ${vert[2]}),\n`);
+    });
+    return str;
+}
+function getFaces() {
+    //carObj = new Car('new');
+    let pointStr = '';
+    let faceStr = '';
+    let vertIndex = 0;
+    for(let i=0; i<carObj.polys.length; i++) {}
+    carObj.polys.forEach(poly => {
+        faceStr += `    [${[...Array(poly.vertices.length).keys()].map(m => m+vertIndex).join()}],`;
+        poly.vertices.forEach(vert => {
+            pointStr += `    new THREE.Vector3(${vert[0]}, ${vert[1]}, ${vert[2]}),\n`;
+            vertIndex++;
+        });
+    });
+    let resultElem = document.createElement('div');
+    resultElem.innerText = `var points = [\n${pointStr}];\nvar faces = [\n${faceStr}];`;
+    document.body.appendChild(resultElem);
+    window.scrollTo(0,document.body.scrollHeight);
 }
 
 //////////////////////////////////////////////////////////
@@ -246,7 +286,7 @@ class Car {
         }
     }
     getRebasedPolys() {
-        let r_polys = this.polys;
+        let r_polys = [ ...this.polys.map(m => Object.assign({}, m)) ];
         let min = [0,0,0];
         // getting the lowest negative value for each axis
         this.polys.forEach(_p => {
@@ -267,13 +307,15 @@ class Car {
         });
         return r_polys;
     }
-    getCode() {
-        let result = `// EXPORTED\n\n1stColor(${this.color1[0]},${this.color1[1]},${this.color1[2]})\n`;
-        result += `2ndColor(${this.color2[0]},${this.color2[1]},${this.color2[2]})\n`;
+    getCode(triangulated) {
+        let result = `// EXPORTED\n\n1stColor(${this.color1[0]},${this.color1[1]},${this.color1[2]})\n2ndColor(${this.color2[0]},${this.color2[1]},${this.color2[2]})\n`;
         this.polys.forEach(_p => {
-            result += _p.getCode()+'\n\n';
+            result += _p.getCode(triangulated).join('\n\n')+'\n\n';
         });
-        return result;
+        saveFile('result.txt',result);
+    }
+    logVerts() {
+        console.log(carObj.polys.map(m => m.vertices));
     }
 }
 
@@ -292,22 +334,64 @@ class Poly {
         this.isLightF = isLightF;
         this.isLightB = isLightB;
         this.comment = comment.length>0 ? comment : `c(${color[0]},${color[1]},${color[2]})`;
-        this.vectors = earcut([].concat.apply([], vertices), null, 3);
+        //this.vectors = earcut([].concat.apply([], vertices), null, 3);
     }
-    getCode() {
-        let result = `<p>\n// ${this.comment}\nc(${this.color[0]},${this.color[1]},${this.color[2]})\n`;
-        result += this.hasgr ? `gr(${this.gr})\n` : '';
-        result += this.hasfs ? `fs(${this.gr})\n` : '';
-        result += this.isGlass ? `glass\n` : '';
-        result += this.isLight && !this.isLightB && !this.isLightF ? `light\n` : '';
-        result += this.isLightF ? `lightF\n` : '';
-        result += this.isLightB ? `lightB\n` : '';
-        this.vertices.forEach(_v => {
-            result += `p(${_v[0]},${_v[1]},${_v[2]})\n`;
-        });
-        result += '</p>';
-        document.getElementById('result_text').value = result;
-        return result;
+    getCode(shouldTriangulate) {
+        let polys = [];
+        if(shouldTriangulate) {
+            let indices = earcut(this.vertices.flat(), null, 3);
+            let chunk = 3;
+            for (let i = 0; i < indices.length; i += chunk) {
+                let result = `<p>\n// ${this.comment}\nc(${this.color[0]},${this.color[1]},${this.color[2]})\n`;
+                indices.slice(i, i + chunk).forEach((indice) => {
+                    result += `p(${this.vertices[indice].join(',')})\n`;
+                });
+                result += '</p>';
+                polys.push(result);
+            }
+        }
+        else {
+            let result = `<p>\n// ${this.comment}\nc(${this.color[0]},${this.color[1]},${this.color[2]})\n`;
+            result += this.hasgr ? `gr(${this.gr})\n` : '';
+            result += this.hasfs ? `fs(${this.gr})\n` : '';
+            result += this.isGlass ? `glass\n` : '';
+            result += this.isLight && !this.isLightB && !this.isLightF ? `light\n` : '';
+            result += this.isLightF ? `lightF\n` : '';
+            result += this.isLightB ? `lightB\n` : '';
+            this.vertices.forEach(_v => {
+                result += `p(${_v[0]},${_v[1]},${_v[2]})\n`;
+            });
+            result += '</p>';
+            polys.push(result);
+        }
+        return polys;
+    }
+    debugTriangulate() {
+        return {
+            verts: this.vertices,
+            flatVerts: this.vertices.flat(),
+            earcut: earcut(this.vertices.flat(), null, 3),
+            result: this.getCode(true),
+        }
+    }
+    debug2D() {
+        let polys = [];
+        let indices = earcut(this.vertices.map(m => [1,m[1],m[2]]).flat(), null, 3);
+        let chunk = 3;
+        for (let i = 0; i < indices.length; i += chunk) {
+            let result = `<p>\n// ${this.comment}\nc(${this.color[0]},${this.color[1]},${this.color[2]})\n`;
+            indices.slice(i, i + chunk).forEach((indice) => {
+                result += `p(${this.vertices[indice].join(',')})\n`;
+            });
+            result += '</p>';
+            polys.push(result);
+        }
+        return {
+            verts: this.vertices.map(m => [1,m[1],m[2]]),
+            flatVerts: this.vertices.map(m => [1,m[1],m[2]]).flat(),
+            earcut: earcut(this.vertices.map(m => [1,m[1],m[2]]).flat(), null, 3),
+            result: polys.join('\n'),
+        }
     }
 }
 
