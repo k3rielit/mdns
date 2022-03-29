@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mdns-api", "mdns-api\mdns-api.csproj", "{ED2068F4-1EE0-415A-A45A-F70109057AEF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED2068F4-1EE0-415A-A45A-F70109057AEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED2068F4-1EE0-415A-A45A-F70109057AEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED2068F4-1EE0-415A-A45A-F70109057AEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED2068F4-1EE0-415A-A45A-F70109057AEF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C225AE99-BBB8-4E9B-9541-EDEF6BA93523}
+	EndGlobalSection
+EndGlobal
