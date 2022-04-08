@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Net.Sockets;
+using System.Net.WebSockets;
 
 namespace mdns_api.Controllers {
     [Route("api/profiles")]
@@ -11,27 +13,7 @@ namespace mdns_api.Controllers {
         private static readonly Random r = new Random();
         public static readonly SortedDictionary<string,Profile> profiles = new();
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<string>>> GetNames() {
-            return Ok(profiles.Select(s => s.Key));
-        }
-
-        [HttpGet("all")]
-        public async Task<ActionResult<IEnumerable<Profile>>> GetAll() {
-            return Ok(profiles.Values);
-        }
-
-        [HttpGet("count")]
-        public async Task<ActionResult<int>> GetCount() {
-            return Ok(profiles.Count);
-        }
-
-        [HttpGet("random")]
-        public async Task<ActionResult<Profile>> GetRandom() {
-            return Ok(profiles.Count > 0 ? profiles.ElementAt(r.Next(0, profiles.Count)).Value : new Profile());
-        }
-
-        [HttpGet("stats")]
+        /*[HttpGet("stats")]
         public async Task<ActionResult<IEnumerable<object>>> GetStats() {
             return Ok(new {
                 profiles.Count,
@@ -41,6 +23,26 @@ namespace mdns_api.Controllers {
                 Cars = profiles.Select(p => p.Value.Cars).SelectMany(c => c).ToList().Distinct().OrderBy(o => o),
                 Stages = profiles.Select(p => p.Value.Stages).SelectMany(s => s).ToList().Distinct().OrderBy(o => o),
             });
+        }*/
+        [HttpPost("login/")]
+        public async Task<ActionResult<string>> TryLogin(string username, string password) {
+            string data = string.Empty;
+            try {
+                using TcpClient client = new();
+                await client.ConnectAsync(new IPAddress(new byte[4]{69,195,146,194}), 7061);
+                using NetworkStream ns = client.GetStream();
+                using StreamReader sr = new(ns,Encoding.Latin1);
+                using StreamWriter wr = new(ns,Encoding.Latin1) {
+                    AutoFlush = true
+                };
+                await wr.WriteLineAsync($"1|{username}|{password}|");
+                data = await sr.ReadLineAsync();
+            }
+            catch(Exception ex) {
+                Console.WriteLine(ex);
+                return BadRequest();
+            }
+            return Ok(data);
         }
 
         [HttpGet("get/{name}")]
@@ -50,11 +52,12 @@ namespace mdns_api.Controllers {
                 Profile profile = new() {
                     Name = System.Web.HttpUtility.UrlDecode(name),
                 };
+                name = name.Replace(' ', '_').Replace("%20", "_");
                 // logo, avatar check
                 string logoUrl = $"http://multiplayer.needformadness.com/profiles/{name}/logo.png";
                 string avatarUrl = $"http://multiplayer.needformadness.com/profiles/{name}/avatar.png";
                 profile.Logo = await Utils.RemoteFileExists(logoUrl) ? logoUrl : "";
-                profile.Avatar = await Utils.RemoteFileExists(avatarUrl) ? logoUrl : "";
+                profile.Avatar = await Utils.RemoteFileExists(avatarUrl) ? avatarUrl : "";
                 // cars
                 string carlist = await Utils.GetText($"http://multiplayer.needformadness.com/cars/lists/{name}.txt", Encoding.Latin1);
                 profile.Cars = carlist.Contains("mycars(") ? carlist.Split('(', ')')[1].Split(',').ToList() : profile.Cars;

@@ -4,7 +4,8 @@
 | ------ | ------ |
 | [web-api/](web-api/) | A .NET 6 API written in C#. Probably REST. |
 | [web-frontend/](web-frontend/) | For now, a simple HTML,CSS,JS prototype, with some working elements. |
-| [run_web-api.bat](run_web-api.bat) | Builds and runs the web-api app, and runs the default browser to access Swagger. |
+| [run-web-api.bat](run-web-api.bat) | Builds and runs the web-api app, and runs the default browser to access Swagger. |
+| [install-dotnet-packages.bat](install-dotnet-packages.bat) | Tries to install the required dependencies (only for this project). |
 
 Take a look inside the `README.md` files next to the projects for more details, such as dependencies, instructions, etc.
 ### How to download

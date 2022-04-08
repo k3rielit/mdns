@@ -46,7 +46,7 @@
                     "1|%username%|%password%|",
                 },
                 Source = "CarMaker.java:4314 [.ctachm()]",
-                Description = "Tests username and password, and returns with: -1: server error, 1/2: incorrect username/password, -167: trial account, 0/3/10<: success (alongside 'code|nickey|clan|clankey|')"
+                Description = "Tests username and password, and returns with: -1: server error, 1: bad username 2: bad password, -167: trial account, 0/3/111/10<: success (alongside 'code|nickey|clan|clankey|')"
             },
             ["removecar"] = new {
                 Url = "multiplayer.needformadness.com",

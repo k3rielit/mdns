@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Top 20</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" type="image/png" href="assets/kubu.png"/>
+    <!-- Custom built theme - This already includes Bootstrap 4 -->
+    <script src="js/utils.js"></script>
+    <script src="js/classes.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/toggle-bootstrap.min.css">
+    <link rel="stylesheet" href="css/toggle-bootstrap-dark.min.css">
+    <link rel="stylesheet" href="css/toggle-bootstrap-print.min.css">
+    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <style>
+        .card .list-group-item {
+            padding: 0;
+        }
+        .card .card-canvas {
+            width: 100%;
+        }
+        #listitem-template {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="bootstrap-dark">
+    <nav class="navbar navbar-expand-lg border-bottom navbar-themed" id="main-nav-bar">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">JSNFM</a>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav mr-auto mt-2 mt-md-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html"><i class="las la-house-damage mr-1"></i>Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="top20.html"><i class="las la-chart-bar mr-1"></i>Top 20</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="editor.html"><i class="las la-cube mr-1"></i>Editor</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="cars.html"><i class="las la-car mr-1"></i>Cars</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="stages.html"><i class="las la-map mr-1"></i>Stages</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="clans.html"><i class="las la-users mr-1"></i>Clans</a>
+                </li>
+            </ul>
+            <ul class="form-inline navbar-nav my-2 my-lg-0">
+                <li class="nav-item mx-2">
+                    <a class="nav-link" href="javascript:document.getElementsByTagName('body')[0].setAttribute('class', 'bootstrap-dark');"><i class="las la-moon"></i></a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link" href="javascript:document.getElementsByTagName('body')[0].setAttribute('class', 'bootstrap');"><i class="las la-sun"></i></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-3 mb-3">
+
+        <div class="row justify-content-center">
+            <div class="col-12 mt-4">
+                <h1 class="text-center">Cars - Weekly</h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">All</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-weekly-all"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">A</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-weekly-a"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">A & B</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-weekly-ab"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">B</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-weekly-b"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">B & C</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-weekly-bc"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">C</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-weekly-c"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-12 mt-4">
+                <h1 class="text-center">Cars - Monthly</h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">All</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-monthly-all"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">A</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-monthly-a"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">A & B</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-monthly-ab"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">B</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-monthly-b"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">B & C</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-monthly-bc"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">C</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-monthly-c"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-12 mt-4">
+                <h1 class="text-center">Cars - Semi-Annual</h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">All</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-semiannual-all"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">A</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-semiannual-a"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">A & B</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-semiannual-ab"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">B</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-semiannual-b"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">B & C</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-semiannual-bc"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">C</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-semiannual-c"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-12 mt-4">
+                <h1 class="text-center">Cars - Annual</h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">All</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-annual-all"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">A</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-annual-a"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">A & B</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-annual-ab"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">B</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-annual-b"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">B & C</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-annual-bc"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">C</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-annual-c"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-12 mt-4">
+                <h1 class="text-center">Cars - Alltime</h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">All</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-alltime-all"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">A</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-alltime-a"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">A & B</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-alltime-ab"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">B</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-alltime-b"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">B & C</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-alltime-bc"></ul>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">C</div>
+                    <ul class="list-group list-group-flush text-center" id="cars-alltime-c"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-12 mt-4">
+                <h1 class="text-center">Stages</h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-4 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">Weekly</div>
+                    <ul class="list-group list-group-flush text-center" id="stages-weekly"></ul>
+                </div>
+            </div>
+            <div class="col-4 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">Monthly</div>
+                    <ul class="list-group list-group-flush text-center" id="stages-monthly"></ul>
+                </div>
+            </div>
+            <div class="col-4 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">Alltime</div>
+                    <ul class="list-group list-group-flush text-center" id="stages-alltime"></ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <li class="list-group-item" id="listitem-template">
+        <span id="name"></span><span id="addedcount" class="badge badge-primary ml-2"></span>
+        <canvas class="card-canvas" id="canvas" width="350" height="250"></canvas>
+    </li>
+
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/edit.js"></script>
+    <script src="js/fiddle3dV2.js"></script>
+    <script>
+        let cars = [];
+        let apiUrl = 'https://localhost:7041/api/';
+        function get(apiUrl = 'https://localhost:7041/api/') {
+            fetch(apiUrl+'misc/top20').then(response => response.json()).then(data => {
+                for (const [timespanName, timespanClasses] of Object.entries(data.cars)) {
+                    for (const [className, classCars] of Object.entries(timespanClasses)) {
+                        let classContainer = document.getElementById(`cars-${timespanName}-${className}`);
+                        let template = document.getElementById('listitem-template');
+                        for (const [carName, addedCount] of Object.entries(classCars)) {
+                            let listitem = template.cloneNode(true);
+                            listitem.removeAttribute('id');
+                            listitem.querySelector('#name').innerHTML = carName.replaceAll(' ','&nbsp;');
+                            listitem.querySelector('#addedcount').innerHTML = addedCount;
+                            classContainer.appendChild(listitem);
+                            createRender(carName,listitem.querySelector('#canvas'));
+                        }
+                    }
+                }
+            });
+        }
+        async function createRender(carName,canvas) {
+            fetch(apiUrl+'cars/get/'+(carName.replaceAll(' ','_'))).then(response => response.json()).then(cardata => {
+                renderIsometric(new Car(cardata.code,cardata.name).polys,canvas);
+            });
+        }
+        get();
+        // https://stackoverflow.com/questions/46241827/fetch-api-requesting-multiple-get-requests
+    </script>
+
+</body>
+
+</html>

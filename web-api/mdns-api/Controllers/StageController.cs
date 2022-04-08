@@ -11,32 +11,14 @@ namespace mdns_api.Controllers {
         private static readonly Random r = new();
         public static readonly SortedDictionary<string, Stage> stages = new();
 
-        [HttpGet]
-        public async Task<ActionResult<List<Stage>>> GetAll() {
-            return Ok(stages);
-        }
-
-        [HttpGet("names")]
-        public async Task<ActionResult<List<string>>> GetNames() {
-            return Ok(stages.Keys);
-        }
-
-        [HttpGet("random")]
-        public async Task<ActionResult<Stage>> GetRandom() {
-            return Ok(stages.ElementAt(r.Next(0, stages.Count)));
-        }
-
-        [HttpGet("count")]
-        public async Task<ActionResult<int>> GetCount() {
-            return Ok(stages.Count);
-        }
-
         [HttpGet("get/{name}")]
         public async Task<ActionResult<Stage>> GetByName(string name) {
+            name = name.Replace(' ', '_').Replace("%20", "_");
             if(!stages.ContainsKey(name)) {
                 HttpClient client = new();
                 Stage stage = new() {
                     Name = System.Web.HttpUtility.UrlDecode(name),
+                    DownloadUrl = $"https://{Request.Host}/api/stages/asfile/{System.Web.HttpUtility.UrlDecode(name).Replace(' ', '_').Replace("%20", "_")}.rad",
                 };
                 // code
                 string code = await Utils.GetPublishedCode("tracks", name);
@@ -76,6 +58,7 @@ namespace mdns_api.Controllers {
         }
         [HttpGet("asfile/{name}.{extension}")]
         public async Task<ActionResult<string>> GetAsFile(string name, string extension = "rad") {
+            name = name.Replace(' ', '_').Replace("%20", "_");
             byte[] code = await Utils.GetPublishedCodeByteArray("tracks", name);
             if(code.Length > 0) {
                 byte[] data = await Utils.GetByteArray($"http://multiplayer.needformadness.com/tracks/{name}.txt");

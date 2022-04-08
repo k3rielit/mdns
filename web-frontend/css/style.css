@@ -39,34 +39,33 @@ body {
     width: 97%;
 }
 
-#theme-list a {
-    font-size: 0.85rem;
-    padding-top: 3px;
-    padding-bottom: 3px;
-}
-#theme-list-current {
-    cursor: default;
+#result-template, #clanmembertemplate, #clancartemplate, #clanstagetemplate {
+    display: none;
 }
 
 @keyframes fadein {
     from { opacity: 0; }
     to   { opacity: 1; }
 }
-
-.bg-dark button {
-    /*color: var(--bs-light) !important;*/
-    color: rgba(255,255,255,.55);
-}
-.bg-light button {
-    /*color: var(--bs-dark) !important;*/
-    color: rgba(0,0,0,.55);
+.hide {
+    display: none !important;
 }
 
-#darkmode-toggle-container {
-    text-align: right;
+
+/* SCROLLBAR */
+* {
+    scrollbar-width: auto;
+    scrollbar-color: #2c3136 #191d21;
 }
-#darkmode-toggle-container input {
-    float: right;
-    position: relative !important;
-    margin: 5px !important;
+  /* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 10px;
+}
+*::-webkit-scrollbar-track {
+    background: #191d21;
+}
+*::-webkit-scrollbar-thumb {
+    background-color: #2c3136;
+    border-radius: 2px;
+    border: 0px solid #ffffff;
 }

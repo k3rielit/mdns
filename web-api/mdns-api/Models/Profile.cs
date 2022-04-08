@@ -1,4 +1,6 @@
-﻿namespace mdns_api.Models {
+﻿
+
+namespace mdns_api.Models {
     public class Profile {
         public string Name { get; set; } = string.Empty;
         public string Logo { get; set; } = "https://dummyimage.com/120x30/aaa/ffffff.png&text=No+Logo";

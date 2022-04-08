@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Cars</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" type="image/png" href="assets/kubu.png"/>
+    <!-- Custom built theme - This already includes Bootstrap 4 -->
+    <script src="js/utils.js"></script>
+    <script src="js/classes.js"></script>
+    <link rel="stylesheet" href="css/toggle-bootstrap.min.css">
+    <link rel="stylesheet" href="css/toggle-bootstrap-dark.min.css">
+    <link rel="stylesheet" href="css/toggle-bootstrap-print.min.css">
+    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/jszip.min.js"></script>
+</head>
+
+<body class="bootstrap-dark">
+    <nav class="navbar navbar-expand-lg border-bottom navbar-themed" id="main-nav-bar">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">JSNFM</a>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav mr-auto mt-2 mt-md-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html"><i class="las la-house-damage mr-1"></i>Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="top20.html"><i class="las la-chart-bar mr-1"></i>Top 20</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="editor.html"><i class="las la-cube mr-1"></i>Editor</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="cars.html"><i class="las la-car mr-1"></i>Cars</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="stages.html"><i class="las la-map mr-1"></i>Stages</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="las la-users mr-1"></i>Profiles</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="clans.html"><i class="las la-users mr-1"></i>Clans</a>
+                </li>
+            </ul>
+            <ul class="form-inline navbar-nav my-2 my-lg-0">
+                <li class="nav-item mx-2">
+                    <a class="nav-link" href="javascript:document.getElementsByTagName('body')[0].setAttribute('class', 'bootstrap-dark');"><i class="las la-moon"></i></a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link" href="javascript:document.getElementsByTagName('body')[0].setAttribute('class', 'bootstrap');"><i class="las la-sun"></i></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-3 mb-3">
+        <!-- search bar -->
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="input-group mb-3">
+                    <button class="btn btn-outline-secondary" type="button" id="search-btn" onclick="search()"><i class="las la-search"></i> Search</button>
+                    <select class="custom-select" id="search-type">
+                        <option value="name">by name</option>
+                        <option value="clan">all from clan</option>
+                        <option value="profile">all from profile</option>
+                        <option value="published" selected>all published by</option>
+                    </select>
+                    <input id="search-name" type="text" class="form-control" placeholder="name" required>
+                    <div class="input-group-text">
+                        <span class="mr-2">Auto Clear</span>
+                        <input id="autoclear" type="checkbox" checked>
+                    </div>
+                    <button class="btn btn-outline-danger" type="button" id="clear-btn" onclick="cars=[];document.getElementById('search-results').innerText='';"><i class="las la-trash-alt"></i></button>
+                </div>
+            </div>
+        </div>
+        <!-- zip -->
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="input-group mb-3">
+                    <button class="btn btn-outline-warning" type="button" id="clear-btn" onclick="downloadZip();"><i class="las la-download"></i> Zip</button>
+                    <select class="custom-select" id="zip-type">
+                        <option value="none">all in one</option>
+                        <option value="groupby.publisher" selected>group by publisher</option>
+                        <option value="groupby.publishType">group by publish type</option>
+                        <option value="groupby.className">group by class</option>
+                        <option value="groupby.initial">group by name initial</option>
+                    </select>
+                    <input id="zip-name" type="text" class="form-control" placeholder="name" required value="mycars">
+                </div>
+            </div>
+        </div>
+        <!-- search results -->
+        <div class="row justify-content-center" id="search-results"></div>
+    </div>
+
+
+    <!-- templates -->
+    <div class="col-lg-4 mt-2" id="result-template">
+        <div class="card">
+            <h5 class="card-header">
+                <span id="name">undefined</span><span class="badge ml-2" id="publishtype">undefined</span>
+                <span class="badge badge-danger float-right p-1" style="cursor: pointer;" onclick="this.parentNode.parentNode.parentNode.remove();">&#10005;</span>
+            </h5>
+            <canvas id="canvas" style="margin:auto;" width="350" height="250"></canvas>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <i class="las la-vector-square mr-2 text-secondary"></i><span id="polycount">0</span> polygons <i class="las la-code-branch ml-2 mr-2 text-secondary"></i><span id="vertcount">0</span> vertices<i class="las la-cube ml-2 mr-2 text-secondary"></i><span id="sizex">0</span> x <span id="sizey">0</span> x <span id="sizez">0</span>
+                </li>
+                <li class="list-group-item">
+                    <i style="color: #000000;" id="color1-tint" class="las la-tint mr-2"></i><span id="color1-hex" class="mr-2">#000000</span><span id="color1-rgb" class="mr-2">c(0,0,0)</span><i style="color: #000000;" id="color2-tint" class="las la-tint mr-2"></i><span id="color2-hex" class="mr-2">#000000</span><span id="color2-rgb" class="mr-2">c(0,0,0)</span>
+                </li>
+                <li class="list-group-item" style="overflow-y: auto; height:100px;">
+                    <i class="las la-user-edit mr-2 text-secondary"></i><span id="publisher" class="mr-2">undefined</span><i class="las la-download mr-2 text-secondary"></i><span id="addedcount">0</span><i class="las la-user-friends ml-2 mr-2 text-secondary"></i><span id="addedbylist">-</span>
+                </li>
+                <button class="btn btn-primary " id="downloadbtn">
+                    <i class="las la-download"></i>
+                </button>
+            </ul>
+        </div>
+    </div>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/edit.js"></script>
+    <script src="js/fiddle3dV2.js"></script>
+
+    <script>
+        let cars = [];
+        document.getElementById('zip-name').value;
+
+        function search(apiUrl = 'https://localhost:7041/api/') {
+            let name = document.getElementById('search-name').value;
+            let type = document.getElementById('search-type').value;
+            if(name && type) {
+                if(document.getElementById('autoclear').checked) {
+                    cars = [];
+                    document.getElementById('search-results').innerText = '';
+                }
+                switch(type) {
+
+                    case 'name':
+                        fetch(apiUrl+'cars/get/'+(name.replaceAll(' ','_'))).then(response => response.json()).then(data => {
+                            console.log(data);
+                            createResultElem(data);
+                        });
+                        break;
+
+                    case 'clan':
+                        fetch(apiUrl+'clans/get/'+(name.replaceAll(' ','_'))).then(response => response.json()).then(data => {
+                            data.cars.forEach(car => {
+                                fetch(apiUrl+'cars/get/'+(car.replaceAll(' ','_'))).then(response2 => response2.json()).then(data2 => {
+                                    createResultElem(data2);
+                                });
+                            });
+                        });
+                        break;
+
+                    case 'profile':
+                        fetch(apiUrl+'profiles/get/'+(name.replaceAll(' ','_'))).then(response => response.json()).then(data => {
+                            data.cars.forEach(car => {
+                                fetch(apiUrl+'cars/get/'+(car.replaceAll(' ','_'))).then(response2 => response2.json()).then(data2 => {
+                                    createResultElem(data2);
+                                });
+                            });
+                        });
+                        break;
+
+                    case 'published':
+                        fetch(apiUrl+'profiles/get/'+(name.replaceAll(' ','_'))).then(response => response.json()).then(data => {
+                            data.cars.forEach(car => {
+                                fetch(apiUrl+'cars/get/'+(car.replaceAll(' ','_'))).then(response2 => response2.json()).then(data2 => {
+                                    if(data2.publisher == document.getElementById('search-name').value) {
+                                        createResultElem(data2);
+                                    }
+                                });
+                            });
+                        });
+                        break;
+
+                }
+            }
+        }
+
+        function createResultElem(car) {
+            let container = document.getElementById('search-results');
+            let elem = document.getElementById('result-template').cloneNode(true);
+            console.log(car);
+            let carobject = new Car(car.code,car.name,car.publisher);
+            let carsize = NUtils.getModelSize(carobject.polys, carobject.scaleX, carobject.scaleY, carobject.scaleZ).actualSize;
+            cars.push(car);
+            elem.removeAttribute('id');
+            [
+                ['#name',car.name.replaceAll(' ','&nbsp;')],
+                ['#publishtype',['Private','Public','Super Public'][car.publishType]],
+                ['#polycount',carobject.polys.length],
+                ['#vertcount',carobject.polys.map(poly => poly.vertices.length).sum()],
+                ['#sizex',NUtils.roundNum(carsize[0],2)],
+                ['#sizey',NUtils.roundNum(carsize[1],2)],
+                ['#sizez',NUtils.roundNum(carsize[2],2)],
+                ['#color1-hex',NUtils.rgbToHex(carobject.color1)],
+                ['#color2-hex',NUtils.rgbToHex(carobject.color2)],
+                ['#color1-rgb',`c(${carobject.color1.join(',')})`],
+                ['#color2-rgb',`c(${carobject.color2.join(',')})`],
+                ['#publisher',car.publisher.replaceAll(' ','&nbsp;')],
+                ['#addedcount',car.addedBy.length],
+                ['#addedbylist',car.addedBy.map(profileName => profileName.replaceAll(' ','&nbsp;')).join(', ')],
+            ].forEach(prop => elem.querySelector(prop[0]).innerHTML = prop[1]);
+            if(car.clanProperty) {
+                elem.querySelector('.card-header').innerHTML += '<span class="badge badge-warning">Clan Car</span>';
+            }
+            elem.querySelector('#color1-tint').style.color = `rgb(${carobject.color1.join(',')})`;
+            elem.querySelector('#color2-tint').style.color = `rgb(${carobject.color2.join(',')})`;
+            elem.querySelector('#publishtype').classList.add(['badge-secondary','badge-primary','badge-success'][car.publishType]);
+            elem.querySelector('#downloadbtn').addEventListener('click',() => {
+                NUtils.saveFile(car.name+'.rad',car.code);
+            },false);
+            container.appendChild(elem);
+            renderIsometric(carobject.polys,elem.querySelector('#canvas'));
+        }
+
+        async function downloadZip() {
+            if(cars.length>0) {
+                let zip = new JSZip();
+                let filters = document.getElementById('zip-type').value.split('.');
+                switch (filters[0]) {
+
+                    case 'none':
+                        cars.forEach((car,i) => {
+                            zip.file((car.name || 'unnamed')+'.rad',car.code);
+                        });
+                        break;
+                        
+                    case 'groupby':
+                        let folders = {};
+                        let genindex = (car) => car[filters[1]];
+                        switch(filters[1]) {
+                            case 'initial':
+                                genindex = (car) => car.name[0]; console.log('switched to initial');
+                                break;
+                            break;
+                        }
+                        cars.forEach((car,i) => {
+                            let folderindex = genindex(car);
+                            if(!folders[folderindex]) {
+                                folders[folderindex] = zip.folder(folderindex);
+                            }
+                            folders[folderindex].file((car.name || 'unnamed')+'.rad',car.code);
+                        });
+                        console.log(folders);
+                        break;
+                }
+                await zip.generateAsync({type:"blob"}).then(function(content) {
+                    NUtils.saveBlob(`${document.getElementById('zip-name').value}-x${cars.length}`,content);
+                });
+            }
+        }
+    </script>
+
+</body>
+
+</html>

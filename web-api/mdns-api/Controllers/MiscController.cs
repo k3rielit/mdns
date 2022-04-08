@@ -7,10 +7,17 @@ namespace mdns_api.Controllers {
     [Route("api/misc")]
     [ApiController]
     public class MiscController : ControllerBase {
+        private static string LastTopTwentyDate = string.Empty;
+        private static object? TopTwenty;
         [HttpGet("top20")]
         public async Task<ActionResult<object>> GetTopTwentyObject() {
-            object topTwenty = new {
-                Date = DateTime.Now.ToString("yyyy.MM.dd"),
+            string today = DateTime.Now.ToString("yyyy.MM.dd");
+            if(TopTwenty != null && LastTopTwentyDate == today) {
+                return Ok(TopTwenty);
+            }
+            LastTopTwentyDate = today;
+            TopTwenty = new {
+                Date = today,
                 Cars = new {
                     Weekly = new {
                         All = await Utils.GetTop20("cars","W","all"),
@@ -59,7 +66,7 @@ namespace mdns_api.Controllers {
                     Alltime = await Utils.GetTop20("tracks","A"),
                 },
             };
-            return Ok(topTwenty);
+            return Ok(TopTwenty);
         }
     }
 }

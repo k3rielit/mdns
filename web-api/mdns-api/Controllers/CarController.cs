@@ -12,39 +12,25 @@ namespace mdns_api.Controllers {
 
         private static readonly Random r = new();
         public static readonly SortedDictionary<string,Car> cars = new();
-
-        [HttpGet]
-        public async Task<ActionResult<List<Car>>> GetAll() {
-            return Ok(cars);
-        }
-
-        [HttpGet("names")]
-        public async Task<ActionResult<List<string>>> GetNames() {
-            return Ok(cars.Keys);
-        }
-
-        [HttpGet("random")]
-        public async Task<ActionResult<Car>> GetRandom() {
-            return Ok(cars.ElementAt(r.Next(0, cars.Count)));
-        }
-
-        [HttpGet("count")]
-        public async Task<ActionResult<int>> GetCount() {
-            return Ok(cars.Count);
-        }
+        public static readonly string[] classes = new string[5]{"C","BC","B","AB","A"};
 
         [HttpGet("get/{name}")]
         public async Task<ActionResult<Car>> GetByName(string name) {
+            name = name.Replace(' ', '_').Replace("%20", "_");
             if(!cars.ContainsKey(name)) {
                 HttpClient client = new();
-                Car car = new() {
+                Car car = new() { //System.Web.HttpUtility.UrlDecode(name).Replace(' ', '_').Replace("%20", "_")
                     Name = System.Web.HttpUtility.UrlDecode(name),
+                    DownloadUrl = $"https://{Request.Host}/api/cars/asfile/{System.Web.HttpUtility.UrlDecode(name).Replace(' ', '_').Replace("%20", "_")}.rad",
                 };
                 // code
                 string code = await Utils.GetPublishedCode("cars",name);
                 if(code.Length > 0) {
                     car.Code = code;
-                    foreach(string line in code.Split('\n')) car.PolyCount += line.Trim().StartsWith("<p>") ? 1 : 0;
+                    foreach(string line in code.Split('\n')) {
+                        car.PolyCount += line.Trim().StartsWith("<p>") ? 1 : 0;
+                        car.VertexCount += line.Trim().StartsWith("p(") ? 1 : 0;
+                    }
                 }
                 else return NotFound();
                 // other properties
@@ -55,6 +41,12 @@ namespace mdns_api.Controllers {
                     car.Publisher = details[0];
                     car.PublishType = Convert.ToByte(details[1]);
                     car.Class = Convert.ToByte(details[2]);
+                    try {
+                        car.ClassName = classes[car.Class];
+                    }
+                    catch(Exception) {
+                        car.ClassName = "C";
+                    }
                     car.AddedBy = details.Skip(3).ToList();
                     if(detailsraw.Contains("Clan#")) {
                         car.ClanProperty = true;
